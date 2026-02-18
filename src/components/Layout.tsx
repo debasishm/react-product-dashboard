@@ -12,10 +12,7 @@ export default function Layout() {
         width: "100%",
       }}
     >
-      {/* FULL-WIDTH HEADER */}
       <Header />
-
-      {/* PAGE CONTENT */}
       <Box
         component="main"
         sx={{

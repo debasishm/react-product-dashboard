@@ -18,7 +18,6 @@ export default function Charts() {
         const res = await axios.get("https://dummyjson.com/products?limit=100");
         const products = res.data.products;
 
-        // Count products per category
         const map: Record<string, number> = {};
         products.forEach((p: any) => {
           map[p.category] = (map[p.category] || 0) + 1;

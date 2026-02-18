@@ -42,7 +42,5 @@ export const fetchProducts = async ({
 
 export async function fetchCategories(): Promise<string[]> {
   const res = await axios.get("https://dummyjson.com/products/categories");
-
-  // ✅ If API returns objects, map them
   return res.data.map((cat: any) => cat.slug);
 }

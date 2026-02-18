@@ -23,7 +23,6 @@ export default function Dashboard() {
   const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
 
-  // 🔹 Load favorite products
   const loadFavorites = async () => {
     const favoriteIds = getFavorites();
 
@@ -32,7 +31,6 @@ export default function Dashboard() {
       return;
     }
 
-    // Fetch each product by ID
     const requests = favoriteIds.map((id) =>
       fetch(`https://dummyjson.com/products/${id}`).then((res) => res.json()),
     );
@@ -46,8 +44,8 @@ export default function Dashboard() {
   }, []);
 
   const handleRemove = (id: number) => {
-    toggleFavorite(id); // remove from localStorage
-    setProducts((prev) => prev.filter((p) => p.id !== id)); // update UI immediately
+    toggleFavorite(id);
+    setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
   return (

@@ -128,7 +128,6 @@ export default function Home() {
         ))}
       </Grid>
 
-      {/* PAGINATION */}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
         <Pagination
           count={Math.ceil(total / LIMIT)}
