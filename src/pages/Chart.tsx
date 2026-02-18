@@ -1,4 +1,5 @@
-import { Box, Typography, Grid, Paper, CircularProgress } from "@mui/material";
+import { Box, Typography, Paper, CircularProgress } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { BarChart, PieChart } from "@mui/x-charts";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -53,9 +54,8 @@ export default function Charts() {
         Product Analytics
       </Typography>
 
-      <Grid container spacing={4}>
-        {/* BAR CHART */}
-        <Grid item xs={12} md={6}>
+      <Grid spacing={4}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Products per Category
@@ -78,8 +78,7 @@ export default function Charts() {
           </Paper>
         </Grid>
 
-        {/* PIE CHART */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Category Distribution

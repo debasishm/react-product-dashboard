@@ -5,13 +5,12 @@ import {
   Box,
   Typography,
   CircularProgress,
-  Grid,
   Card,
   CardMedia,
-  TextField,
   Button,
   Divider,
 } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { isFavorite, toggleFavorite } from "../utils/favorites";
@@ -26,24 +25,19 @@ type Product = {
   category: string;
 };
 
-type Comment = {
-  text: string;
-  date: string;
-};
+// type Comment = {
+//   text: string;
+//   date: string;
+// };
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
 
   const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [comment, setComment] = useState<string>("");
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [fav, setFav] = useState<boolean>(false);
-
-  const loadComments = () => {
-    const saved = localStorage.getItem(`comments_${id}`);
-    if (saved) setComments(JSON.parse(saved));
-  };
+  const [loading, setLoading] = useState(false);
+  // const [comment, setComment] = useState("");
+  // const [comments, setComments] = useState<Comment[]>([]);
+  const [fav, setFav] = useState(false);
 
   const fetchProduct = async () => {
     try {
@@ -59,26 +53,25 @@ export default function ProductDetail() {
 
   useEffect(() => {
     fetchProduct();
-    // loadComments();
   }, [id]);
 
   useEffect(() => {
     if (id) setFav(isFavorite(Number(id)));
   }, [id]);
 
-  const addComment = () => {
-    if (!comment.trim()) return;
+  // const addComment = () => {
+  //   if (!comment.trim()) return;
 
-    const newComment: Comment = {
-      text: comment,
-      date: new Date().toLocaleString(),
-    };
+  //   const newComment: Comment = {
+  //     text: comment,
+  //     date: new Date().toLocaleString(),
+  //   };
 
-    const updated = [newComment, ...comments];
-    setComments(updated);
-    localStorage.setItem(`comments_${id}`, JSON.stringify(updated));
-    setComment("");
-  };
+  //   const updated = [newComment, ...comments];
+  //   setComments(updated);
+  //   localStorage.setItem(`comments_${id}`, JSON.stringify(updated));
+  //   setComment("");
+  // };
 
   if (loading || !product) {
     return (
@@ -95,7 +88,7 @@ export default function ProductDetail() {
       </Typography>
 
       <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardMedia
               component="img"
@@ -106,9 +99,9 @@ export default function ProductDetail() {
             />
           </Card>
 
-          <Grid container spacing={2} mt={1}>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
             {product.images.slice(1, 4).map((img, index) => (
-              <Grid item xs={4} key={index}>
+              <Grid key={index} size={{ xs: 4 }}>
                 <Card>
                   <CardMedia
                     component="img"
@@ -122,7 +115,7 @@ export default function ProductDetail() {
           </Grid>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Typography variant="h5" color="primary" mb={1}>
             ${product.price}
           </Typography>
@@ -131,10 +124,10 @@ export default function ProductDetail() {
             variant="outlined"
             color={fav ? "error" : "primary"}
             startIcon={fav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, mb: 2 }}
             onClick={() => {
               toggleFavorite(product.id);
-              setFav(!fav);
+              setFav((prev) => !prev);
             }}
           >
             {fav ? "Remove from Favorites" : "Add to Favorites"}
@@ -156,11 +149,11 @@ export default function ProductDetail() {
 
       <Divider sx={{ my: 4 }} />
 
-      <Typography variant="h5" mb={2}>
+      {/* <Typography variant="h5" mb={2}>
         Comments
-      </Typography>
+      </Typography> */}
 
-      <Box mb={2}>
+      {/* <Box mb={2}>
         <TextField
           fullWidth
           multiline
@@ -192,7 +185,7 @@ export default function ProductDetail() {
             {c.date}
           </Typography>
         </Box>
-      ))}
+      ))} */}
     </Box>
   );
 }

@@ -5,14 +5,13 @@ import {
   CardMedia,
   Typography,
   Button,
-  Grid,
   TextField,
   Pagination,
 } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
 import { fetchProducts } from "../api/productsApi";
 import type { Product } from "../types/product";
-// import type { Category } from "../types/category";
 import CategoryFilter from "../components/CategoryFilter";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -43,16 +42,11 @@ export default function Home() {
     });
   }, [page, search, category]);
 
-  // useEffect(() => {
-  //   setFavorites(getFavorites());
-  // }, []);
-
   return (
     <Box>
-      {/* FILTER BAR */}
       <Box sx={{ mb: 4, p: 2, bgcolor: "#f5f5f5", borderRadius: 2 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               label="Search products"
               fullWidth
@@ -64,7 +58,7 @@ export default function Home() {
             />
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <CategoryFilter
               value={category}
               onChange={(val) => {
@@ -77,10 +71,9 @@ export default function Home() {
         </Grid>
       </Box>
 
-      {/* PRODUCTS */}
       <Grid container spacing={3}>
         {products.map((product) => (
-          <Grid item xs={12} sm={6} md={3} key={product.id}>
+          <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
             <Card sx={{ height: "100%" }}>
               <CardMedia
                 component="img"

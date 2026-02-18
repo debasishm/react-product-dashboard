@@ -1,5 +1,4 @@
 import {
-  Grid,
   Card,
   CardContent,
   CardMedia,
@@ -7,6 +6,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { getFavorites, toggleFavorite } from "../utils/favorites";
@@ -55,14 +55,23 @@ export default function Dashboard() {
       </Typography>
 
       {products.length === 0 && (
-        <Typography color="text.secondary">
-          No favorite products added yet.
-        </Typography>
+        <Box
+          sx={{
+            minHeight: "40vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography color="text.secondary">
+            No favorite products added yet.
+          </Typography>
+        </Box>
       )}
 
       <Grid container spacing={3}>
         {products.map((product) => (
-          <Grid item xs={12} sm={6} md={3} key={product.id}>
+          <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
             <Card sx={{ height: "100%" }}>
               <CardMedia
                 component="img"
@@ -86,7 +95,7 @@ export default function Dashboard() {
                   sx={{ mt: 1 }}
                   onClick={() => handleRemove(product.id)}
                 >
-                  Remove Favorite
+                  Fav
                 </Button>
               </CardContent>
             </Card>
