@@ -11,16 +11,10 @@ import { useEffect, useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { getFavorites, toggleFavorite } from "../utils/favorites";
 import { useNavigate } from "react-router-dom";
-
-type Product = {
-  id: number;
-  title: string;
-  price: number;
-  thumbnail: string;
-};
+import type { Product as ProductType } from "../types/product";
 
 export default function Dashboard() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
   const navigate = useNavigate();
 
   const loadFavorites = async () => {

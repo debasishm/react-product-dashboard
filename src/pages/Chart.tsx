@@ -2,7 +2,8 @@ import { Box, Typography, Paper, CircularProgress } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { BarChart, PieChart } from "@mui/x-charts";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchAllProducts } from "../api/productsApi";
+import type { Product } from "../types/product";
 
 type CategoryStats = {
   category: string;
@@ -16,11 +17,11 @@ export default function Charts() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const res = await axios.get("https://dummyjson.com/products?limit=100");
-        const products = res.data.products;
+        const products: Product[] = await fetchAllProducts(100);
 
         const map: Record<string, number> = {};
-        products.forEach((p: any) => {
+
+        products.forEach((p) => {
           map[p.category] = (map[p.category] || 0) + 1;
         });
 
@@ -31,7 +32,7 @@ export default function Charts() {
 
         setData(formatted);
       } catch (error) {
-        console.error(error);
+        console.error("Failed to load analytics", error);
       } finally {
         setLoading(false);
       }
@@ -54,7 +55,7 @@ export default function Charts() {
         Product Analytics
       </Typography>
 
-      <Grid spacing={4}>
+      <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ mb: 2 }}>

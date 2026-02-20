@@ -11,7 +11,7 @@ import {
 import Grid from "@mui/material/Grid";
 import { useEffect, useState } from "react";
 import { fetchProducts } from "../api/productsApi";
-import type { Product } from "../types/product";
+import type { Product as ProductType } from "../types/product";
 import CategoryFilter from "../components/CategoryFilter";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -21,7 +21,7 @@ import { toggleFavorite, getFavorites } from "../utils/favorites";
 const LIMIT = 30;
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [search, setSearch] = useState("");

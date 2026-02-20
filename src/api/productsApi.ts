@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Product } from "../types/product";
+import type { Category } from "../types/category";
 
 const API = "https://dummyjson.com";
 
@@ -35,11 +36,26 @@ export const fetchProducts = async ({
 
   console.log("API CALL:", url);
 
-  const res = await axios.get(url);
+  const res = await axios.get<ProductResponse>(url);
   return res.data;
 };
 
 export async function fetchCategories(): Promise<string[]> {
-  const res = await axios.get("https://dummyjson.com/products/categories");
-  return res.data.map((cat: any) => cat.slug);
+  const res = await axios.get(`${API}/products/categories`);
+  return res.data.map((cat: Category) => cat.slug);
+}
+
+export async function fetchProductById(id: string | number): Promise<Product> {
+  const res = await axios.get<Product>(`${API}/products/${id}`);
+  return res.data;
+}
+
+export async function fetchAllProducts(
+  limit: number = 100,
+): Promise<Product[]> {
+  const res = await axios.get<{ products: Product[] }>(
+    `${API}/products?limit=${limit}`,
+  );
+
+  return res.data.products;
 }
