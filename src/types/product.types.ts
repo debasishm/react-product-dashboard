@@ -7,6 +7,9 @@ export interface Review {
 }
 
 export interface Product {
+  rating: number | null | undefined;
+  stock: number;
+  discountPercentage: number;
   id: number;
   title: string;
   description: string;
