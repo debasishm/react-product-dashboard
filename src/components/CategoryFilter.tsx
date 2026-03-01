@@ -14,7 +14,6 @@ export default function CategoryFilter({ value, onChange }: Props) {
   useEffect(() => {
     fetchCategories()
       .then((data) => {
-        console.log("Categories:", data);
         setCategories(data);
       })
       .catch(console.error)

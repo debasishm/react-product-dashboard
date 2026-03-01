@@ -1,6 +1,8 @@
+// src/pages/ProductDetail.tsx
+
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchProductById } from "../api/productsApi";
+import { getProductById } from "../services/product.service";
 import {
   Box,
   Typography,
@@ -10,49 +12,70 @@ import {
   Button,
   Divider,
   Rating,
+  TextField,
+  Alert,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { isFavorite, toggleFavorite } from "../utils/favorites";
-import type { Product } from "../types/product";
+import { isFavorite, toggleFavorite } from "../utils/favourites";
+import type { Product } from "../types/product.types";
 
+/**
+ * Product detail page
+ */
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
 
   const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [fav, setFav] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [fav, setFav] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<string>("");
 
-  const fetchProduct = async () => {
-    if (!id) return;
-
-    try {
-      setLoading(true);
-      const data = await fetchProductById(id);
-      setProduct(data);
-    } catch (err) {
-      console.error("Failed to load product", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [newRating, setNewRating] = useState<number | null>(0);
+  const [newComment, setNewComment] = useState<string>("");
 
   useEffect(() => {
-    if (id) fetchProduct();
+    const loadProduct = async () => {
+      if (!id) return;
+
+      try {
+        setLoading(true);
+        setError(null);
+
+        const data = await getProductById(id);
+        setProduct(data);
+        setSelectedImage(data.images?.[0] || data.thumbnail);
+        setFav(isFavorite(Number(id)));
+      } catch {
+        setError("Unable to load product details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
   }, [id]);
 
-  useEffect(() => {
-    if (id) setFav(isFavorite(Number(id)));
-  }, [id]);
-
-  if (loading || !product) {
+  if (loading) {
     return (
-      <Box display="flex" justifyContent="center" mt={5}>
+      <Box display="flex" justifyContent="center" mt={6}>
         <CircularProgress />
       </Box>
     );
   }
+
+  if (error || !product) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+
+  const discountedPrice = product.discountPercentage
+    ? (
+        product.price -
+        (product.price * product.discountPercentage) / 100
+      ).toFixed(2)
+    : product.price.toFixed(2);
 
   return (
     <Box>
@@ -66,16 +89,25 @@ export default function ProductDetail() {
             <CardMedia
               component="img"
               height="350"
-              image={product.images[0]}
+              image={selectedImage}
               alt={product.title}
               sx={{ objectFit: "cover" }}
             />
           </Card>
 
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            {product.images.slice(1, 4).map((img, index) => (
-              <Grid key={index} size={{ xs: 4 }}>
-                <Card>
+          <Grid container spacing={2} mt={1}>
+            {product.images?.map((img) => (
+              <Grid key={img} size={{ xs: 4 }}>
+                <Card
+                  onClick={() => setSelectedImage(img)}
+                  sx={{
+                    cursor: "pointer",
+                    border:
+                      selectedImage === img
+                        ? "2px solid var(--color-primary)"
+                        : "1px solid #eee",
+                  }}
+                >
                   <CardMedia
                     component="img"
                     height="100"
@@ -89,8 +121,10 @@ export default function ProductDetail() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-          <Typography variant="h5" color="primary" mb={1}>
-            ${product.price}
+          <Rating value={product.rating} precision={0.5} readOnly />
+
+          <Typography variant="h5" color="primary" mt={2}>
+            ${discountedPrice}
           </Typography>
 
           <Button
@@ -100,60 +134,38 @@ export default function ProductDetail() {
             sx={{ mt: 2, mb: 2 }}
             onClick={() => {
               toggleFavorite(product.id);
-              setFav((prev) => !prev);
+              setFav(!fav);
             }}
           >
             {fav ? "Remove from Favorites" : "Add to Favorites"}
           </Button>
 
-          <Typography variant="body1" mb={2}>
-            {product.description}
-          </Typography>
-
-          <Typography variant="body2">
-            <strong>Brand:</strong> {product.brand}
-          </Typography>
-
-          <Typography variant="body2">
-            <strong>Category:</strong> {product.category}
-          </Typography>
+          <Typography>{product.description}</Typography>
         </Grid>
       </Grid>
 
       <Divider sx={{ my: 4 }} />
 
-      <Typography variant="h5" mb={2}>
-        Reviews
-      </Typography>
+      <Typography variant="h6">Add a Review</Typography>
 
-      {!product.reviews || product.reviews.length === 0 ? (
-        <Typography color="text.secondary">No reviews available.</Typography>
-      ) : (
-        product.reviews.map((review, index) => (
-          <Box
-            key={index}
-            p={2}
-            mb={2}
-            border="1px solid #e0e0e0"
-            borderRadius={2}
-          >
-            <Typography fontWeight={600}>{review.reviewerName}</Typography>
+      <Rating value={newRating} onChange={(_, value) => setNewRating(value)} />
 
-            <Rating
-              value={review.rating}
-              readOnly
-              size="small"
-              sx={{ mb: 1 }}
-            />
+      <TextField
+        fullWidth
+        multiline
+        rows={3}
+        sx={{ mt: 2 }}
+        value={newComment}
+        onChange={(e) => setNewComment(e.target.value)}
+      />
 
-            <Typography variant="body2">{review.comment}</Typography>
-
-            <Typography variant="caption" color="text.secondary">
-              {new Date(review.date).toLocaleDateString()}
-            </Typography>
-          </Box>
-        ))
-      )}
+      <Button
+        variant="contained"
+        sx={{ mt: 2 }}
+        disabled={!newRating || !newComment}
+      >
+        Submit Review
+      </Button>
     </Box>
   );
 }

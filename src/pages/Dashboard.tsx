@@ -5,37 +5,20 @@ import {
   Typography,
   Button,
   Box,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useEffect, useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { getFavorites, toggleFavorite } from "../utils/favorites";
 import { useNavigate } from "react-router-dom";
-import type { Product as ProductType } from "../types/product";
+
+import { useFavoriteProducts } from "../hooks/useFavoriteProducts";
+import { toggleFavorite } from "../utils/favourites";
 
 export default function Dashboard() {
-  const [products, setProducts] = useState<ProductType[]>([]);
+  const { products, setProducts, loading, error } = useFavoriteProducts();
+
   const navigate = useNavigate();
-
-  const loadFavorites = async () => {
-    const favoriteIds = getFavorites();
-
-    if (favoriteIds.length === 0) {
-      setProducts([]);
-      return;
-    }
-
-    const requests = favoriteIds.map((id) =>
-      fetch(`https://dummyjson.com/products/${id}`).then((res) => res.json()),
-    );
-
-    const results = await Promise.all(requests);
-    setProducts(results);
-  };
-
-  useEffect(() => {
-    loadFavorites();
-  }, []);
 
   const handleRemove = (id: number) => {
     toggleFavorite(id);
@@ -43,20 +26,21 @@ export default function Dashboard() {
   };
 
   return (
-    <Box>
-      <Typography variant="h5" sx={{ mb: 3 }}>
+    <Box className="main-content">
+      <Typography variant="h5" className="page-title">
         Favorite Products
       </Typography>
 
-      {products.length === 0 && (
-        <Box
-          sx={{
-            minHeight: "40vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+      {loading && (
+        <Box className="center-box">
+          <CircularProgress />
+        </Box>
+      )}
+
+      {error && <Alert severity="error">{error}</Alert>}
+
+      {!loading && !error && products.length === 0 && (
+        <Box className="empty-state">
           <Typography color="text.secondary">
             No favorite products added yet.
           </Typography>
@@ -66,12 +50,13 @@ export default function Dashboard() {
       <Grid container spacing={3}>
         {products.map((product) => (
           <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
-            <Card sx={{ height: "100%" }}>
+            <Card className="product-card">
               <CardMedia
                 component="img"
                 height="160"
                 image={product.thumbnail}
-                sx={{ objectFit: "contain", cursor: "pointer" }}
+                className="product-image clickable"
+                loading="lazy"
                 onClick={() => navigate(`/products/${product.id}`)}
               />
 
@@ -86,10 +71,10 @@ export default function Dashboard() {
                   fullWidth
                   color="error"
                   startIcon={<FavoriteIcon />}
-                  sx={{ mt: 1 }}
+                  className="remove-btn"
                   onClick={() => handleRemove(product.id)}
                 >
-                  Fav
+                  Remove
                 </Button>
               </CardContent>
             </Card>

@@ -1,101 +1,86 @@
-import { Box, Typography, Paper, CircularProgress } from "@mui/material";
+// src/pages/Chart.tsx
+
+import { Box, Typography, Paper, CircularProgress, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { BarChart, PieChart } from "@mui/x-charts";
 import { useEffect, useState } from "react";
-import { fetchAllProducts } from "../api/productsApi";
-import type { Product } from "../types/product";
+import { getAllProducts } from "../services/product.service";
+import type { Product } from "../types/product.types";
 
-type CategoryStats = {
-  category: string;
-  count: number;
-};
-
+/**
+ * Product analytics dashboard
+ */
 export default function Charts() {
-  const [data, setData] = useState<CategoryStats[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<{ category: string; count: number }[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadProducts = async () => {
+    const loadAnalytics = async () => {
       try {
-        const products: Product[] = await fetchAllProducts(100);
+        const products: Product[] = await getAllProducts(100);
 
-        const map: Record<string, number> = {};
+        const categoryMap: Record<string, number> = {};
 
         products.forEach((p) => {
-          map[p.category] = (map[p.category] || 0) + 1;
+          categoryMap[p.category] = (categoryMap[p.category] || 0) + 1;
         });
 
-        const formatted: CategoryStats[] = Object.keys(map).map((key) => ({
-          category: key,
-          count: map[key],
-        }));
+        const formatted = Object.entries(categoryMap)
+          .map(([category, count]) => ({ category, count }))
+          .sort((a, b) => b.count - a.count);
 
         setData(formatted);
-      } catch (error) {
-        console.error("Failed to load analytics", error);
+      } catch {
+        setError("Unable to load analytics data.");
       } finally {
         setLoading(false);
       }
     };
 
-    loadProducts();
+    loadAnalytics();
   }, []);
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 8 }}>
+      <Box display="flex" justifyContent="center" mt={8}>
         <CircularProgress />
       </Box>
     );
   }
 
+  if (error) return <Alert severity="error">{error}</Alert>;
+
   return (
     <Box>
-      <Typography variant="h4" sx={{ mb: 4 }}>
+      <Typography variant="h4" mb={4}>
         Product Analytics
       </Typography>
 
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Products per Category
-            </Typography>
-
             <BarChart
-              xAxis={[
-                {
-                  data: data.map((d) => d.category),
-                  scaleType: "band",
-                },
-              ]}
-              series={[
-                {
-                  data: data.map((d) => d.count),
-                },
-              ]}
-              height={300}
+              xAxis={[{ scaleType: "band", data: data.map((d) => d.category) }]}
+              series={[{ data: data.map((d) => d.count) }]}
+              height={350}
             />
           </Paper>
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Category Distribution
-            </Typography>
-
             <PieChart
               series={[
                 {
                   data: data.map((d, index) => ({
                     id: index,
-                    label: d.category,
                     value: d.count,
+                    label: d.category,
                   })),
                 },
               ]}
-              height={300}
+              height={350}
             />
           </Paper>
         </Grid>
