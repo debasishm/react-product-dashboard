@@ -34,8 +34,6 @@ export const fetchProducts = async ({
     url = `${API}/products/category/${category}?limit=${limit}&skip=${skip}`;
   }
 
-  console.log("API CALL:", url);
-
   const res = await axios.get<ProductResponse>(url);
   return res.data;
 };
