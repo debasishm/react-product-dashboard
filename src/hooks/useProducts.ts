@@ -1,5 +1,3 @@
-// src/hooks/useProducts.ts
-
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/product.service";
 import type { Product } from "../types/product.types";

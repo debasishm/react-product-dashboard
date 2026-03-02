@@ -1,5 +1,3 @@
-// src/pages/Chart.tsx
-
 import { Box, Typography, Paper, CircularProgress, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { BarChart, PieChart } from "@mui/x-charts";

@@ -2,6 +2,7 @@ import { axiosClient } from "./axiosClient";
 import { API_ENDPOINTS } from "../constants/api.constants";
 import type { ProductResponse } from "../types/api.types";
 import type { Product } from "../types/product.types";
+import type { Category } from "../types/category.types";
 
 export const fetchProductsApi = async (
   params: Record<string, unknown>,
@@ -36,3 +37,8 @@ export const fetchProductByIdApi = async (
   const { data } = await axiosClient.get(API_ENDPOINTS.PRODUCT_BY_ID(id));
   return data;
 };
+
+export async function fetchCategories(): Promise<string[]> {
+  const res = await axiosClient.get(API_ENDPOINTS.PRODUCT_CATEGORIES);
+  return res.data.map((cat: Category) => cat.slug);
+}

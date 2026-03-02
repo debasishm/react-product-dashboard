@@ -1,5 +1,3 @@
-// src/hooks/useFavoriteProducts.ts
-
 import { useEffect, useState } from "react";
 import { getProductById } from "../services/product.service";
 import { getFavorites } from "../utils/favourites";

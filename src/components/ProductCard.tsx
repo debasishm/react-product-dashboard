@@ -1,4 +1,4 @@
-import type { Product } from "../types/product";
+import type { Product } from "../types/product.types";
 import {
   Card,
   CardContent,
@@ -8,34 +8,34 @@ import {
   Button,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import "../styles/productCcard.css";
 
+/**
+ * ProductCard Component
+ *
+ * Responsibility:
+ * - Displays product thumbnail, title, and price
+ * - Provides navigation to product detail page
+ */
 export default function ProductCard({ product }: { product: Product }) {
   return (
-    <Card
-      sx={{
-        width: 280,
-        height: 360,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <Card className="product-card">
       <CardMedia
         component="img"
         image={product.thumbnail}
         alt={product.title}
-        sx={{
-          height: 160,
-          objectFit: "cover",
-        }}
+        loading="lazy"
+        className="product-card-media"
       />
-
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography fontWeight={600} gutterBottom noWrap>
+      <CardContent className="product-card-content">
+        <Typography gutterBottom noWrap className="product-card-title">
           {product.title}
         </Typography>
-        <Typography color="text.secondary">₹ {product.price}</Typography>
-      </CardContent>
 
+        <Typography color="text.secondary" className="product-card-price">
+          ₹ {product.price}
+        </Typography>
+      </CardContent>
       <CardActions>
         <Button
           size="small"

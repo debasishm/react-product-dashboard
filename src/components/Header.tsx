@@ -1,26 +1,42 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import { APP_TEXT } from "../constants/text.constants";
+import "../styles/header.css";
 
+/**
+ * Header Component
+ *
+ * Displays the main application navigation bar.
+ * All static labels are sourced from text.constants.ts
+ */
 export default function Header() {
   return (
-    <AppBar position="static" sx={{ width: "100%" }}>
+    /**
+     * Application Top Navigation Bar
+     */
+    <AppBar position="static" className="app-header">
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Product Dashboard
+        {/* Application Title */}
+        <Typography variant="h6" className="header-title">
+          {APP_TEXT.APP_TITLE}
         </Typography>
 
-        <Box>
+        {/* Navigation Buttons */}
+        <Box className="header-nav">
           <Button color="inherit" component={RouterLink} to="/">
-            Home
+            {APP_TEXT.NAVIGATION.HOME}
           </Button>
+
           <Button color="inherit" component={RouterLink} to="/dashboard">
-            Dashboard
+            {APP_TEXT.NAVIGATION.DASHBOARD}
           </Button>
+
           <Button color="inherit" component={RouterLink} to="/chart">
-            Chart
+            {APP_TEXT.NAVIGATION.CHART}
           </Button>
+
           <Button color="inherit" component={RouterLink} to="/about">
-            About
+            {APP_TEXT.NAVIGATION.ABOUT}
           </Button>
         </Box>
       </Toolbar>

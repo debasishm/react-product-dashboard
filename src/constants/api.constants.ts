@@ -1,5 +1,3 @@
-// src/constants/api.constants.ts
-
 /**
  * Base API URL from environment
  */

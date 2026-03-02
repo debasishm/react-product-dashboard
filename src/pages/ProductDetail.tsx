@@ -1,8 +1,5 @@
-// src/pages/ProductDetail.tsx
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../services/product.service";
 import {
   Box,
   Typography,
@@ -12,107 +9,107 @@ import {
   Button,
   Divider,
   Rating,
-  TextField,
-  Alert,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { isFavorite, toggleFavorite } from "../utils/favourites";
+import {
+  getProductDetail,
+  checkIfFavorite,
+  toggleProductFavorite,
+} from "../services/product.service";
 import type { Product } from "../types/product.types";
+import "../styles/page.css";
 
 /**
- * Product detail page
+ * ProductDetail Page
+ *
+ * Displays:
+ * - Product images
+ * - Product information
+ * - Favorite toggle
+ * - Reviews list
  */
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [fav, setFav] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [isFav, setIsFav] = useState<boolean>(false);
 
-  const [newRating, setNewRating] = useState<number | null>(0);
-  const [newComment, setNewComment] = useState<string>("");
+  /**
+   * Loads product details from service
+   */
+  const loadProduct = async () => {
+    if (!id) return;
+
+    try {
+      setLoading(true);
+
+      const data = await getProductDetail(id);
+
+      if (data) {
+        setProduct(data);
+        setIsFav(checkIfFavorite(data.id));
+      }
+    } catch (error) {
+      console.error("Error loading product:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadProduct = async () => {
-      if (!id) return;
-
-      try {
-        setLoading(true);
-        setError(null);
-
-        const data = await getProductById(id);
-        setProduct(data);
-        setSelectedImage(data.images?.[0] || data.thumbnail);
-        setFav(isFavorite(Number(id)));
-      } catch {
-        setError("Unable to load product details.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadProduct();
   }, [id]);
 
-  if (loading) {
+  const handleFavoriteToggle = () => {
+    if (!product) return;
+
+    toggleProductFavorite(product.id);
+    setIsFav((prev) => !prev);
+  };
+
+  if (loading || !product) {
     return (
-      <Box display="flex" justifyContent="center" mt={6}>
+      <Box className="center-box">
         <CircularProgress />
       </Box>
     );
   }
 
-  if (error || !product) {
-    return <Alert severity="error">{error}</Alert>;
-  }
-
-  const discountedPrice = product.discountPercentage
-    ? (
-        product.price -
-        (product.price * product.discountPercentage) / 100
-      ).toFixed(2)
-    : product.price.toFixed(2);
-
   return (
-    <Box>
-      <Typography variant="h4" fontWeight={600} mb={3}>
+    <Box className="main-content">
+      <Typography variant="h4" className="page-title">
         {product.title}
       </Typography>
 
       <Grid container spacing={4}>
+        {/* ===============================
+            Left Side - Product Images
+        ================================ */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardMedia
               component="img"
               height="350"
-              image={selectedImage}
+              image={product.images[0]}
               alt={product.title}
-              sx={{ objectFit: "cover" }}
+              className="product-detail-main-image"
             />
           </Card>
 
-          <Grid container spacing={2} mt={1}>
-            {product.images?.map((img) => (
-              <Grid key={img} size={{ xs: 4 }}>
-                <Card
-                  onClick={() => setSelectedImage(img)}
-                  sx={{
-                    cursor: "pointer",
-                    border:
-                      selectedImage === img
-                        ? "2px solid var(--color-primary)"
-                        : "1px solid #eee",
-                  }}
-                >
+          {/* Thumbnail Images */}
+          <Grid container spacing={2} className="thumbnail-grid">
+            {product.images.slice(1, 4).map((img, index) => (
+              <Grid key={index} size={{ xs: 4 }}>
+                <Card>
                   <CardMedia
                     component="img"
                     height="100"
                     image={img}
-                    sx={{ objectFit: "cover" }}
+                    alt={`Thumbnail ${index}`}
+                    className="product-detail-thumbnail"
                   />
                 </Card>
               </Grid>
@@ -120,52 +117,68 @@ export default function ProductDetail() {
           </Grid>
         </Grid>
 
+        {/* ===============================
+            Right Side - Product Info
+        ================================ */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Rating value={product.rating} precision={0.5} readOnly />
-
-          <Typography variant="h5" color="primary" mt={2}>
-            ${discountedPrice}
+          <Typography variant="h5" color="primary" className="product-price">
+            ${product.price}
           </Typography>
 
           <Button
             variant="outlined"
-            color={fav ? "error" : "primary"}
-            startIcon={fav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            sx={{ mt: 2, mb: 2 }}
-            onClick={() => {
-              toggleFavorite(product.id);
-              setFav(!fav);
-            }}
+            color={isFav ? "error" : "primary"}
+            startIcon={isFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            className="favorite-btn"
+            onClick={handleFavoriteToggle}
           >
-            {fav ? "Remove from Favorites" : "Add to Favorites"}
+            {isFav ? "Remove from Favorites" : "Add to Favorites"}
           </Button>
 
-          <Typography>{product.description}</Typography>
+          <Typography variant="body1" className="product-description">
+            {product.description}
+          </Typography>
+
+          <Typography variant="body2">
+            <strong>Brand:</strong> {product.brand}
+          </Typography>
+
+          <Typography variant="body2">
+            <strong>Category:</strong> {product.category}
+          </Typography>
         </Grid>
       </Grid>
 
-      <Divider sx={{ my: 4 }} />
+      <Divider className="section-divider" />
 
-      <Typography variant="h6">Add a Review</Typography>
+      <Box className="reviews-section">
+        <Typography variant="h5" className="section-title">
+          Reviews
+        </Typography>
 
-      <Rating value={newRating} onChange={(_, value) => setNewRating(value)} />
+        {!product.reviews || product.reviews.length === 0 ? (
+          <Typography color="text.secondary">No reviews available.</Typography>
+        ) : (
+          product.reviews.map((review, index) => (
+            <Box key={index} className="review-card">
+              <Typography fontWeight={600}>{review.reviewerName}</Typography>
 
-      <TextField
-        fullWidth
-        multiline
-        rows={3}
-        sx={{ mt: 2 }}
-        value={newComment}
-        onChange={(e) => setNewComment(e.target.value)}
-      />
+              <Rating
+                value={review.rating}
+                readOnly
+                size="small"
+                className="review-rating"
+              />
 
-      <Button
-        variant="contained"
-        sx={{ mt: 2 }}
-        disabled={!newRating || !newComment}
-      >
-        Submit Review
-      </Button>
+              <Typography variant="body2">{review.comment}</Typography>
+
+              <Typography className="review-date">
+                {new Date(review.date).toLocaleDateString()}
+              </Typography>
+            </Box>
+          ))
+        )}
+      </Box>
     </Box>
   );
 }

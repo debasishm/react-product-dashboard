@@ -19,7 +19,17 @@ import CategoryFilter from "../components/CategoryFilter";
 import { useProducts } from "../hooks/useProducts";
 import { PRODUCT_LIMIT } from "../constants/product.constants";
 import { toggleFavorite, getFavorites } from "../utils/favourites";
+import "../styles/page.css";
 
+/**
+ * Home Page
+ *
+ * Displays:
+ * - Search + Category filters
+ * - Product grid
+ * - Pagination
+ * - Favorite toggle feature
+ */
 export default function Home() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -36,7 +46,7 @@ export default function Home() {
 
   return (
     <Box className="main-content">
-      {/* Filters */}
+      {/* Filters Section */}
       <Box className="filter-box">
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -71,20 +81,22 @@ export default function Home() {
         </Box>
       )}
 
-      {/* Error */}
+      {/* Error Message */}
       {error && <Alert severity="error">{error}</Alert>}
 
-      {/* Products */}
+      {/* Product Grid */}
       {!loading && !error && (
         <>
           <Grid container spacing={3}>
             {products.map((product) => (
               <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
                 <Card className="product-card">
+                  {/* Lazy loaded product image */}
                   <CardMedia
                     component="img"
                     height="160"
                     image={product.thumbnail}
+                    alt={product.title}
                     className="product-image"
                     loading="lazy"
                   />
@@ -99,6 +111,7 @@ export default function Home() {
                     </Typography>
 
                     <Box className="product-actions">
+                      {/* View Product */}
                       <Button
                         size="small"
                         onClick={() => navigate(`/products/${product.id}`)}
@@ -106,6 +119,7 @@ export default function Home() {
                         View
                       </Button>
 
+                      {/* Favorite Toggle */}
                       <Button
                         size="small"
                         color={
@@ -132,6 +146,7 @@ export default function Home() {
             ))}
           </Grid>
 
+          {/* Pagination */}
           <Box className="pagination-box">
             <Pagination
               count={Math.ceil(total / PRODUCT_LIMIT)}

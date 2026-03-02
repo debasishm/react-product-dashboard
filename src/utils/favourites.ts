@@ -1,6 +1,4 @@
-// src/utils/favourites.ts
-
-const STORAGE_KEY = "favorite_products";
+import { STORAGE_KEY } from "../constants/text.constants";
 
 /**
  * Retrieve favorite product IDs from localStorage

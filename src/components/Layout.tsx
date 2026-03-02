@@ -1,29 +1,21 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import { Box } from "@mui/material";
+import "../styles/layout.css";
 
+/**
+ * Layout Component
+ *
+ * Provides the main application structure:
+ */
 export default function Layout() {
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-      }}
-    >
+    /**
+     * Full Page Layout Wrapper
+     */
+    <Box className="app-layout">
       <Header />
-      <Box
-        component="main"
-        sx={{
-          flex: 1,
-          width: "100%",
-          maxWidth: 1200,
-          mx: "auto",
-          px: 2,
-          py: 4,
-        }}
-      >
+      <Box component="main" className="app-main">
         <Outlet />
       </Box>
     </Box>
