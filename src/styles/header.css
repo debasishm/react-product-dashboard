@@ -1,0 +1,15 @@
+/* AppBar full width */
+.app-header {
+  width: 100%;
+}
+
+/* Title takes remaining space */
+.header-title {
+  flex-grow: 1;
+}
+
+/* Navigation container */
+.header-nav {
+  display: flex;
+  gap: 8px;
+}

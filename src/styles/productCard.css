@@ -1,0 +1,28 @@
+.product-card {
+  width: 280px;
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card-image {
+  height: 160px;
+  object-fit: cover;
+}
+
+.product-card-content {
+  flex-grow: 1;
+}
+
+.product-card-title {
+  font-weight: 600;
+}
+
+.product-card-price {
+  color: #666;
+}
+
+.category-filter {
+  min-width: 250px;
+  width: 100%;
+}

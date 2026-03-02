@@ -1,0 +1,139 @@
+/* ==========================================
+   Page Level Styles
+   Used across Home / other pages
+   ========================================== */
+
+/* Main page wrapper */
+.main-content {
+  width: 100%;
+}
+
+/* Filter section container */
+.filter-box {
+  margin-bottom: 24px;
+}
+
+/* Loader center alignment */
+.center-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+
+/* Product card styling */
+.product-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Product image styling */
+.product-image {
+  object-fit: cover;
+}
+
+/* Action buttons container */
+.product-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Pagination section */
+.pagination-box {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+/* Loader center alignment */
+.detail-loader {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+
+/* Page title spacing */
+.detail-title {
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+/* Main product image */
+.detail-main-image {
+  object-fit: cover;
+}
+
+/* Thumbnail grid spacing */
+.thumbnail-grid {
+  margin-top: 8px;
+}
+
+/* Thumbnail card */
+.thumbnail-card {
+  cursor: pointer;
+  border: 1px solid #eee;
+}
+
+.thumbnail-card.active {
+  border: 2px solid var(--color-primary);
+}
+
+/* Thumbnail image */
+.thumbnail-image {
+  object-fit: cover;
+}
+
+/* Price spacing */
+.detail-price {
+  margin-top: 16px;
+}
+
+/* Favorite button spacing */
+.detail-fav-btn {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* Divider spacing */
+.detail-divider {
+  margin: 32px 0;
+}
+
+/* Review textarea spacing */
+.review-textarea {
+  margin-top: 16px;
+}
+
+/* Submit button spacing */
+.review-submit {
+  margin-top: 16px;
+}
+
+/* ==========================================
+   Dashboard Page Styles
+   ========================================== */
+
+/* Page title spacing */
+.page-title {
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+/* Empty state container */
+.empty-state {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* Clickable image cursor */
+.clickable {
+  cursor: pointer;
+}
+
+/* Remove button spacing */
+.remove-btn {
+  margin-top: 12px;
+}

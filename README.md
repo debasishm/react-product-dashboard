@@ -1,23 +1,58 @@
-- Product Dashboard App
-  A simple product dashboard built with React + TypeScript.
-  It allows users to browse products, view details and reviews, manage favorites, and see product analytics using charts.
+Product Dashboard
 
-- Tech Stack
+A modern React + TypeScript Product Dashboard built with scalable architecture and professional frontend practices.
 
-React, TypeScript, React Router, Material UI, MUI Charts, Axios, Vite
+🌍 Live Demo : https://react-product-dashboard-demo-g3xec7tvx.vercel.app/
 
-- Installation
 
-After cloning Navigate into the project folder:
+Features
+  - Product Search
+  - Category Filtering
+  - Pagination
+  - Favorites Product
+  - Product Detail Page
+  - Reviews with Ratings
+  - Data Visualization
 
-cd react-dashboard
+Application Pages
+  - Home
+  - Browse products with:
+    - Search
+    - Category filter
+    - Pagination
+  - Dashboard
+  - Product Detail
+  - Chart
+  - About
+
+⚙️ Installation
+
+Clone the repository:
+
+git clone https://github.com/debasishm/react-product-dashboard/tree/develop
+
+Navigate into the project:
+
+cd product-dashboard
 
 Install dependencies:
 
 npm install
 
-Start the development server:
+Run development server:
 
 npm run dev
 
-Then open: http://localhost:5173
+## 📸 Screenshots
+
+### Home Page
+![Home Page](./screenshots/Home.png)
+
+### Product Detail
+![Product Detail](./screenshots/Product.png)
+
+### Dashboard
+![Dashboard](./screenshots/Dashboard.png)
+
+### Chart
+![Dashboard](./screenshots/Chart.png)
