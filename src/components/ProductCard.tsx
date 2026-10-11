@@ -1,4 +1,4 @@
-import type { Product } from "../types/product.types";
+import type { Product } from '../types/product.types';
 import {
   Card,
   CardContent,
@@ -6,9 +6,9 @@ import {
   Typography,
   CardActions,
   Button,
-} from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import "../styles/productCcard.css";
+} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import '../styles/productCcard.css';
 
 /**
  * ProductCard Component

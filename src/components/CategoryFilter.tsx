@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { TextField, MenuItem } from "@mui/material";
-import { fetchCategories } from "../api/product.api";
-import "../styles/ProductCard.css";
-import { APP_TEXT } from "../constants/text.constants";
+import { useEffect, useState } from 'react';
+import { TextField, MenuItem } from '@mui/material';
+import { fetchCategories } from '../api/product.api';
+import '../styles/ProductCard.css';
+import { APP_TEXT } from '../constants/text.constants';
 
 /**
  * CategoryFilter Component
@@ -24,7 +24,7 @@ export default function CategoryFilter({ value, onChange }: Props) {
    */
   useEffect(() => {
     fetchCategories()
-      .then((data) => {
+      .then(data => {
         setCategories(data);
       })
       .catch(console.error)
@@ -38,12 +38,12 @@ export default function CategoryFilter({ value, onChange }: Props) {
       label="Select Category"
       value={value}
       disabled={loading}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={e => onChange(e.target.value)}
       className="category-filter"
     >
       <MenuItem value="">{APP_TEXT.ALL_CATEGORY}</MenuItem>
 
-      {categories.map((cat) => (
+      {categories.map(cat => (
         <MenuItem key={cat} value={cat}>
           {cat}
         </MenuItem>

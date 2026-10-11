@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom";
-import Header from "./Header";
-import { Box } from "@mui/material";
-import "../styles/layout.css";
+import { Outlet } from 'react-router-dom';
+import Header from './Header';
+import { Box } from '@mui/material';
+import '../styles/layout.css';
 
 /**
  * Layout Component

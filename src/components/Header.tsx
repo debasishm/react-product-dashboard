@@ -1,45 +1,80 @@
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import { APP_TEXT } from "../constants/text.constants";
-import "../styles/header.css";
+import { useState } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Link as RouterLink } from 'react-router-dom';
+import { APP_TEXT } from '../constants/text.constants';
 
-/**
- * Header Component
- *
- * Displays the main application navigation bar.
- * All static labels are sourced from text.constants.ts
- */
 export default function Header() {
+  const [open, setOpen] = useState(false);
+
+  const menuItems = [
+    { label: APP_TEXT.NAVIGATION.HOME, path: '/' },
+    { label: APP_TEXT.NAVIGATION.DASHBOARD, path: '/dashboard' },
+    { label: APP_TEXT.NAVIGATION.CHART, path: '/chart' },
+    { label: APP_TEXT.NAVIGATION.ABOUT, path: '/about' },
+  ];
+
   return (
-    /**
-     * Application Top Navigation Bar
-     */
-    <AppBar position="static" className="app-header">
-      <Toolbar>
-        {/* Application Title */}
-        <Typography variant="h6" className="header-title">
-          {APP_TEXT.APP_TITLE}
-        </Typography>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          {/* Hamburger (Mobile Only) */}
+          <IconButton
+            edge="start"
+            color="inherit"
+            sx={{ display: { xs: 'block', md: 'none' }, mr: 2 }}
+            onClick={() => setOpen(true)}
+          >
+            <MenuIcon />
+          </IconButton>
 
-        {/* Navigation Buttons */}
-        <Box className="header-nav">
-          <Button color="inherit" component={RouterLink} to="/">
-            {APP_TEXT.NAVIGATION.HOME}
-          </Button>
+          {/* Site Title */}
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600 }}>
+            Product Dashboard
+          </Typography>
 
-          <Button color="inherit" component={RouterLink} to="/dashboard">
-            {APP_TEXT.NAVIGATION.DASHBOARD}
-          </Button>
+          {/* Desktop Menu */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+            {menuItems.map(item => (
+              <Button
+                key={item.path}
+                color="inherit"
+                component={RouterLink}
+                to={item.path}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Box>
+        </Toolbar>
+      </AppBar>
 
-          <Button color="inherit" component={RouterLink} to="/chart">
-            {APP_TEXT.NAVIGATION.CHART}
-          </Button>
-
-          <Button color="inherit" component={RouterLink} to="/about">
-            {APP_TEXT.NAVIGATION.ABOUT}
-          </Button>
+      {/* Mobile Drawer */}
+      <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
+        <Box sx={{ width: 250 }} onClick={() => setOpen(false)}>
+          <List>
+            {menuItems.map(item => (
+              <ListItem key={item.path} disablePadding>
+                <ListItemButton component={RouterLink} to={item.path}>
+                  <ListItemText primary={item.label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
         </Box>
-      </Toolbar>
-    </AppBar>
+      </Drawer>
+    </>
   );
 }
