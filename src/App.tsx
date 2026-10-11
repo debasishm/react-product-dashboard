@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
-import Charts from "./pages/Chart";
-import ProductDetail from "./pages/ProductDetail";
-import About from "./pages/About";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import Charts from './pages/Chart';
+import ProductDetail from './pages/ProductDetail';
+import About from './pages/About';
 
 export default function App() {
   return (

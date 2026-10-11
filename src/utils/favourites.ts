@@ -1,4 +1,4 @@
-import { STORAGE_KEY } from "../constants/text.constants";
+import { STORAGE_KEY } from '../constants/text.constants';
 
 /**
  * Retrieve favorite product IDs from localStorage
@@ -22,7 +22,7 @@ export const toggleFavorite = (id: number): number[] => {
   let favorites = getFavorites();
 
   favorites = favorites.includes(id)
-    ? favorites.filter((fav) => fav !== id)
+    ? favorites.filter(fav => fav !== id)
     : [...favorites, id];
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
