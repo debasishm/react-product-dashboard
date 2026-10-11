@@ -1,20 +1,20 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi } from 'vitest';
 import {
   getProducts,
   getCategories,
   getProductById,
   getAllProducts,
-} from "./product.service";
-import { apiClient } from "./api.service";
+} from './product.service';
+import { apiClient } from './api.service';
 
-vi.mock("./api.service", () => ({
+vi.mock('./api.service', () => ({
   apiClient: {
     get: vi.fn(),
   },
 }));
 
-describe("product.service", () => {
-  it("calls default products API", async () => {
+describe('product.service', () => {
+  it('calls default products API', async () => {
     const mockData = { products: [], total: 0, skip: 0, limit: 10 };
 
     vi.mocked(apiClient.get).mockResolvedValue({ data: mockData });
@@ -24,47 +24,47 @@ describe("product.service", () => {
     expect(result).toEqual(mockData);
   });
 
-  it("calls search API when search is provided", async () => {
+  it('calls search API when search is provided', async () => {
     const mockData = { products: [], total: 0, skip: 0, limit: 10 };
 
     vi.mocked(apiClient.get).mockResolvedValue({ data: mockData });
 
-    await getProducts({ page: 1, limit: 10, search: "phone" });
+    await getProducts({ page: 1, limit: 10, search: 'phone' });
 
     expect(apiClient.get).toHaveBeenCalled();
   });
 
-  it("calls category API when category is provided", async () => {
+  it('calls category API when category is provided', async () => {
     const mockData = { products: [], total: 0, skip: 0, limit: 10 };
 
     vi.mocked(apiClient.get).mockResolvedValue({ data: mockData });
 
-    await getProducts({ page: 1, limit: 10, category: "electronics" });
+    await getProducts({ page: 1, limit: 10, category: 'electronics' });
 
     expect(apiClient.get).toHaveBeenCalled();
   });
 
-  it("gets categories", async () => {
+  it('gets categories', async () => {
     vi.mocked(apiClient.get).mockResolvedValue({
-      data: ["electronics", "clothing"],
+      data: ['electronics', 'clothing'],
     });
 
     const result = await getCategories();
 
-    expect(result).toEqual(["electronics", "clothing"]);
+    expect(result).toEqual(['electronics', 'clothing']);
   });
 
-  it("gets product by id", async () => {
+  it('gets product by id', async () => {
     vi.mocked(apiClient.get).mockResolvedValue({
-      data: { id: 1, title: "Test" },
+      data: { id: 1, title: 'Test' },
     });
 
     const result = await getProductById(1);
 
-    expect(result).toEqual({ id: 1, title: "Test" });
+    expect(result).toEqual({ id: 1, title: 'Test' });
   });
 
-  it("gets all products", async () => {
+  it('gets all products', async () => {
     vi.mocked(apiClient.get).mockResolvedValue({
       data: { products: [{ id: 1 }] },
     });

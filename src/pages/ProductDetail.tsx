@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -9,17 +9,17 @@ import {
   Button,
   Divider,
   Rating,
-} from "@mui/material";
-import Grid from "@mui/material/Grid";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+} from '@mui/material';
+import Grid from '@mui/material/Grid';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {
   getProductDetail,
   checkIfFavorite,
   toggleProductFavorite,
-} from "../services/product.service";
-import type { Product } from "../types/product.types";
-import "../styles/page.css";
+} from '../services/product.service';
+import type { Product } from '../types/product.types';
+import '../styles/page.css';
 
 /**
  * ProductDetail Page
@@ -53,7 +53,7 @@ export default function ProductDetail() {
         setIsFav(checkIfFavorite(data.id));
       }
     } catch (error) {
-      console.error("Error loading product:", error);
+      console.error('Error loading product:', error);
     } finally {
       setLoading(false);
     }
@@ -67,7 +67,7 @@ export default function ProductDetail() {
     if (!product) return;
 
     toggleProductFavorite(product.id);
-    setIsFav((prev) => !prev);
+    setIsFav(prev => !prev);
   };
 
   if (loading || !product) {
@@ -127,12 +127,12 @@ export default function ProductDetail() {
 
           <Button
             variant="outlined"
-            color={isFav ? "error" : "primary"}
+            color={isFav ? 'error' : 'primary'}
             startIcon={isFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             className="favorite-btn"
             onClick={handleFavoriteToggle}
           >
-            {isFav ? "Remove from Favorites" : "Add to Favorites"}
+            {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
           </Button>
 
           <Typography variant="body1" className="product-description">

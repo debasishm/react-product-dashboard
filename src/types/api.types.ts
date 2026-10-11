@@ -1,6 +1,6 @@
 // src/types/api.types.ts
 
-import type { Product } from "./product.types";
+import type { Product } from './product.types';
 
 /**
  * API response structure for paginated products

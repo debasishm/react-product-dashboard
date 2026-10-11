@@ -1,9 +1,9 @@
-import { Box, Typography, Paper, CircularProgress, Alert } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { BarChart, PieChart } from "@mui/x-charts";
-import { useEffect, useState } from "react";
-import { getAllProducts } from "../services/product.service";
-import type { Product } from "../types/product.types";
+import { Box, Typography, Paper, CircularProgress, Alert } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { BarChart, PieChart } from '@mui/x-charts';
+import { useEffect, useState } from 'react';
+import { getAllProducts } from '../services/product.service';
+import type { Product } from '../types/product.types';
 
 /**
  * Product analytics dashboard
@@ -20,7 +20,7 @@ export default function Charts() {
 
         const categoryMap: Record<string, number> = {};
 
-        products.forEach((p) => {
+        products.forEach(p => {
           categoryMap[p.category] = (categoryMap[p.category] || 0) + 1;
         });
 
@@ -30,7 +30,7 @@ export default function Charts() {
 
         setData(formatted);
       } catch {
-        setError("Unable to load analytics data.");
+        setError('Unable to load analytics data.');
       } finally {
         setLoading(false);
       }
@@ -59,8 +59,8 @@ export default function Charts() {
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
             <BarChart
-              xAxis={[{ scaleType: "band", data: data.map((d) => d.category) }]}
-              series={[{ data: data.map((d) => d.count) }]}
+              xAxis={[{ scaleType: 'band', data: data.map(d => d.category) }]}
+              series={[{ data: data.map(d => d.count) }]}
               height={350}
             />
           </Paper>

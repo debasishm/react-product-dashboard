@@ -7,13 +7,13 @@ import {
   Box,
   CircularProgress,
   Alert,
-} from "@mui/material";
-import Grid from "@mui/material/Grid";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useNavigate } from "react-router-dom";
-import { useFavoriteProducts } from "../hooks/useFavoriteProducts";
-import { toggleFavorite } from "../utils/favourites";
-import "../styles/page.css";
+} from '@mui/material';
+import Grid from '@mui/material/Grid';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useNavigate } from 'react-router-dom';
+import { useFavoriteProducts } from '../hooks/useFavoriteProducts';
+import { toggleFavorite } from '../utils/favourites';
+import '../styles/page.css';
 
 /**
  * Dashboard Page
@@ -41,7 +41,7 @@ export default function Dashboard() {
    */
   const handleRemove = (id: number) => {
     toggleFavorite(id);
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+    setProducts(prev => prev.filter(p => p.id !== id));
   };
 
   return (
@@ -67,7 +67,7 @@ export default function Dashboard() {
       )}
 
       <Grid container spacing={3}>
-        {products.map((product) => (
+        {products.map(product => (
           <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
             <Card className="product-card">
               <CardMedia

@@ -1,8 +1,8 @@
-import { apiClient } from "./api.service";
-import { API_ENDPOINTS } from "../constants/api.constants";
-import type { Product } from "../types/product.types";
-import type { ProductResponse } from "../types/api.types";
-import { isFavorite, toggleFavorite } from "../utils/favourites";
+import { apiClient } from './api.service';
+import { API_ENDPOINTS } from '../constants/api.constants';
+import type { Product } from '../types/product.types';
+import type { ProductResponse } from '../types/api.types';
+import { isFavorite, toggleFavorite } from '../utils/favourites';
 
 /**
  * Fetch paginated products with optional search and category filter
@@ -29,7 +29,7 @@ export const getProducts = async ({
           limit,
           skip,
         },
-      },
+      }
     );
 
     return response.data;
@@ -43,7 +43,7 @@ export const getProducts = async ({
           limit,
           skip,
         },
-      },
+      }
     );
 
     return response.data;
@@ -56,7 +56,7 @@ export const getProducts = async ({
         limit,
         skip,
       },
-    },
+    }
   );
 
   return response.data;
@@ -67,7 +67,7 @@ export const getProducts = async ({
  */
 export const getCategories = async (): Promise<string[]> => {
   const response = await apiClient.get<string[]>(
-    API_ENDPOINTS.PRODUCT_CATEGORIES,
+    API_ENDPOINTS.PRODUCT_CATEGORIES
   );
 
   return response.data;
@@ -78,7 +78,7 @@ export const getCategories = async (): Promise<string[]> => {
  */
 export const getProductById = async (id: string | number): Promise<Product> => {
   const response = await apiClient.get<Product>(
-    API_ENDPOINTS.PRODUCT_BY_ID(id),
+    API_ENDPOINTS.PRODUCT_BY_ID(id)
   );
 
   return response.data;
@@ -88,13 +88,13 @@ export const getProductById = async (id: string | number): Promise<Product> => {
  * Safe wrapper for product detail (with error handling)
  */
 export const getProductDetail = async (
-  id: string | number,
+  id: string | number
 ): Promise<Product | null> => {
   try {
     const product = await getProductById(id);
     return product;
   } catch (error) {
-    console.error("Failed to fetch product detail:", error);
+    console.error('Failed to fetch product detail:', error);
     return null;
   }
 };
@@ -103,13 +103,13 @@ export const getProductDetail = async (
  * Fetch all products (non-paginated)
  */
 export const getAllProducts = async (
-  limit: number = 100,
+  limit: number = 100
 ): Promise<Product[]> => {
   const response = await apiClient.get<ProductResponse>(
     API_ENDPOINTS.PRODUCTS,
     {
       params: { limit },
-    },
+    }
   );
 
   return response.data.products;

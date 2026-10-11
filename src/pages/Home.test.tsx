@@ -1,17 +1,17 @@
-import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MemoryRouter } from "react-router-dom";
-import Home from "./Home";
-import * as hook from "../hooks/useProducts";
-import type { Product } from "../types/product.types";
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
+import Home from './Home';
+import * as hook from '../hooks/useProducts';
+import type { Product } from '../types/product.types';
 
-describe("Home page", () => {
+describe('Home page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("renders loading state", () => {
-    vi.spyOn(hook, "useProducts").mockReturnValue({
+  it('renders loading state', () => {
+    vi.spyOn(hook, 'useProducts').mockReturnValue({
       products: [] as Product[],
       total: 0,
       loading: true,
@@ -21,43 +21,43 @@ describe("Home page", () => {
     render(
       <MemoryRouter>
         <Home />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
-    expect(screen.getByRole("progressbar")).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
-  it("shows error message", () => {
-    vi.spyOn(hook, "useProducts").mockReturnValue({
+  it('shows error message', () => {
+    vi.spyOn(hook, 'useProducts').mockReturnValue({
       products: [] as Product[],
       total: 0,
       loading: false,
-      error: "Error",
+      error: 'Error',
     });
 
     render(
       <MemoryRouter>
         <Home />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     expect(screen.getByText(/error/i)).toBeInTheDocument();
   });
 
-  it("renders product title", () => {
-    vi.spyOn(hook, "useProducts").mockReturnValue({
+  it('renders product title', () => {
+    vi.spyOn(hook, 'useProducts').mockReturnValue({
       products: [
         {
           id: 1,
-          title: "Test Product",
+          title: 'Test Product',
           price: 100,
-          description: "",
+          description: '',
           discountPercentage: 0,
           rating: 0,
           stock: 0,
-          brand: "",
-          category: "",
-          thumbnail: "",
+          brand: '',
+          category: '',
+          thumbnail: '',
           images: [],
         },
       ],
@@ -69,9 +69,9 @@ describe("Home page", () => {
     render(
       <MemoryRouter>
         <Home />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
-    expect(screen.getByText("Test Product")).toBeInTheDocument();
+    expect(screen.getByText('Test Product')).toBeInTheDocument();
   });
 });
