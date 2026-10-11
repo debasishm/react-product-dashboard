@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { getProductById } from "../services/product.service";
-import { getFavorites } from "../utils/favourites";
-import type { Product } from "../types/product.types";
+import { useEffect, useState } from 'react';
+import { getProductById } from '../services/product.service';
+import { getFavorites } from '../utils/favourites';
+import type { Product } from '../types/product.types';
 
 /**
  * Custom hook to fetch all favorite products
@@ -25,12 +25,12 @@ export const useFavoriteProducts = () => {
         }
 
         const results = await Promise.all(
-          favoriteIds.map((id) => getProductById(id)),
+          favoriteIds.map(id => getProductById(id))
         );
 
         setProducts(results);
       } catch {
-        setError("Unable to load favorite products.");
+        setError('Unable to load favorite products.');
       } finally {
         setLoading(false);
       }

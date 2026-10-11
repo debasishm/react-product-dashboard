@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { getProducts } from "../services/product.service";
-import type { Product } from "../types/product.types";
-import type { ProductResponse } from "../types/api.types";
-import { PRODUCT_LIMIT } from "../constants/product.constants";
+import { useEffect, useState } from 'react';
+import { getProducts } from '../services/product.service';
+import type { Product } from '../types/product.types';
+import type { ProductResponse } from '../types/api.types';
+import { PRODUCT_LIMIT } from '../constants/product.constants';
 
 /**
  * Custom hook to manage product list fetching
@@ -10,7 +10,7 @@ import { PRODUCT_LIMIT } from "../constants/product.constants";
 export const useProducts = (
   page: number,
   search?: string,
-  category?: string,
+  category?: string
 ) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [total, setTotal] = useState<number>(0);
@@ -33,7 +33,7 @@ export const useProducts = (
         setProducts(response.products);
         setTotal(response.total);
       } catch {
-        setError("Unable to fetch products. Please try again.");
+        setError('Unable to fetch products. Please try again.');
       } finally {
         setLoading(false);
       }

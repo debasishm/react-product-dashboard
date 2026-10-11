@@ -1,11 +1,11 @@
-import { renderHook, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
-import { useProducts } from "./useProducts";
-import * as productService from "../services/product.service";
-import { createMockProduct } from "../test/mocks/product.mock";
+import { renderHook, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { useProducts } from './useProducts';
+import * as productService from '../services/product.service';
+import { createMockProduct } from '../test/mocks/product.mock';
 
-describe("useProducts hook", () => {
-  it("fetches products successfully", async () => {
+describe('useProducts hook', () => {
+  it('fetches products successfully', async () => {
     const mockResponse = {
       products: [createMockProduct()],
       total: 1,
@@ -13,7 +13,7 @@ describe("useProducts hook", () => {
       limit: 10,
     };
 
-    vi.spyOn(productService, "getProducts").mockResolvedValue(mockResponse);
+    vi.spyOn(productService, 'getProducts').mockResolvedValue(mockResponse);
 
     const { result } = renderHook(() => useProducts(1));
 
