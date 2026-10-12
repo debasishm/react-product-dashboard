@@ -5,6 +5,8 @@ import {
   TextField,
   Pagination,
   Alert,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useState } from 'react';
@@ -16,6 +18,7 @@ import CategoryFilter from '../components/CategoryFilter';
 import ProductCard from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
 import { PRODUCT_LIMIT } from '../constants/product.constants';
+import { PRODUCT_GRID_SIZE } from '../constants/text.constants';
 import { toggleFavorite, getFavorites } from '../utils/favourites';
 import '../styles/page.css';
 
@@ -33,6 +36,8 @@ export default function Home() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [favorites, setFavorites] = useState<number[]>(() => getFavorites());
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Wait until the user stops typing before calling the API
   const debouncedSearch = useDebounce(search);
@@ -94,7 +99,7 @@ export default function Home() {
               const isFav = favorites.includes(product.id);
 
               return (
-                <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                <Grid key={product.id} size={PRODUCT_GRID_SIZE}>
                   <ProductCard
                     product={product}
                     actions={
@@ -124,6 +129,8 @@ export default function Home() {
                 count={pageCount}
                 page={page}
                 onChange={(_, val) => setPage(val)}
+                size={isMobile ? 'small' : 'medium'}
+                siblingCount={isMobile ? 0 : 1}
               />
             </Box>
           )}

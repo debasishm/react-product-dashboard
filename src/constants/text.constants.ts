@@ -14,3 +14,5 @@ export const APP_TEXT = {
     ABOUT: 'About',
   },
 };
+
+export const PRODUCT_GRID_SIZE = { xs: 12, sm: 6, md: 4, lg: 3 };

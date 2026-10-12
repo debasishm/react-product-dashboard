@@ -5,6 +5,7 @@ import {
   CircularProgress,
   Alert,
   useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { BarChart, PieChart } from '@mui/x-charts';
@@ -20,6 +21,8 @@ export default function Chart() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const chartHeight = isMobile ? 300 : 350;
 
   useEffect(() => {
     let ignore = false;
@@ -88,16 +91,27 @@ export default function Chart() {
             series={[{ data: data.map(d => d.count) }]}
             height={350}
           />
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: { xs: 2, md: 3 } }}>
             <BarChart
-              xAxis={[{ scaleType: 'band', data: data.map(d => d.category) }]}
+              xAxis={[
+                {
+                  scaleType: 'band',
+                  data: data.map(d => d.category),
+                  tickLabelStyle: {
+                    angle: -45,
+                    textAnchor: 'end',
+                    fontSize: 10,
+                  },
+                  height: 100,
+                },
+              ]}
               series={[
                 {
                   data: data.map(d => d.count),
                   color: theme.palette.secondary.main,
                 },
               ]}
-              height={350}
+              height={chartHeight}
             />
           </Paper>
         </Grid>
@@ -118,7 +132,7 @@ export default function Chart() {
             series={[{ data: data.map(d => d.count) }]}
             height={350}
           />
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: { xs: 2, md: 3 } }}>
             <PieChart
               series={[
                 {
@@ -129,7 +143,8 @@ export default function Chart() {
                   })),
                 },
               ]}
-              height={350}
+              hideLegend={isMobile}
+              height={chartHeight}
             />
           </Paper>
         </Grid>

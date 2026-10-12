@@ -101,10 +101,10 @@ export default function ProductDetail() {
           <Card>
             <CardMedia
               component="img"
-              height="350"
               image={product.images[0]}
               alt={product.title}
               className="detail-main-image"
+              sx={{ height: { xs: 240, sm: 320, md: 350 } }}
             />
           </Card>
 
@@ -115,7 +115,7 @@ export default function ProductDetail() {
                 <Card>
                   <CardMedia
                     component="img"
-                    height="100"
+                    sx={{ height: { xs: 64, sm: 100 } }}
                     image={img}
                     alt={`Thumbnail ${index}`}
                     className="detail-thumbnail"
@@ -140,6 +140,7 @@ export default function ProductDetail() {
             startIcon={isFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             className="detail-fav-btn"
             onClick={handleFavoriteToggle}
+            sx={{ width: { xs: '100%', sm: 'auto' } }}
           >
             {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
           </Button>

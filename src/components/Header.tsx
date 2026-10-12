@@ -42,7 +42,7 @@ export default function Header() {
           </IconButton>
 
           {/* Site Title */}
-          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600 }}>
+          <Typography variant="h6" noWrap sx={{ flexGrow: 1, fontWeight: 600 }}>
             Product Dashboard
           </Typography>
 

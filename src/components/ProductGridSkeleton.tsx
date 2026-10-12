@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import ProductCardSkeleton from './ProductCardSkeleton';
 import { PRODUCT_LIMIT } from '../constants/product.constants';
+import { PRODUCT_GRID_SIZE } from '../constants/text.constants';
 
 interface ProductGridSkeletonProps {
   /** How many placeholder cards to show */
@@ -16,7 +17,7 @@ export default function ProductGridSkeleton({
   return (
     <Grid container spacing={3} role="status" aria-label="Loading products">
       {Array.from({ length: count }, (_, index) => (
-        <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
+        <Grid key={index} size={PRODUCT_GRID_SIZE}>
           <ProductCardSkeleton />
         </Grid>
       ))}

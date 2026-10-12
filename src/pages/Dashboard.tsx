@@ -6,6 +6,7 @@ import ProductGridSkeleton from '../components/ProductGridSkeleton';
 import { useFavoriteProducts } from '../hooks/useFavoriteProducts';
 import { toggleFavorite } from '../utils/favourites';
 import '../styles/page.css';
+import { PRODUCT_GRID_SIZE } from '../constants/text.constants';
 
 /**
  * Dashboard Page
@@ -54,7 +55,7 @@ export default function Dashboard() {
 
       <Grid container spacing={3}>
         {products.map(product => (
-          <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid key={product.id} size={PRODUCT_GRID_SIZE}>
             <ProductCard
               product={product}
               actions={
