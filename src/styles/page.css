@@ -61,7 +61,7 @@
 /* Thumbnail card */
 .thumbnail-card {
   cursor: pointer;
-  border: 1px solid #eee;
+  border: 1px solid var(--color-border);
 }
 
 .thumbnail-card.active {

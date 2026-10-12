@@ -1,4 +1,11 @@
-import { Box, Typography, Paper, CircularProgress, Alert } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Paper,
+  CircularProgress,
+  Alert,
+  useTheme,
+} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { BarChart, PieChart } from '@mui/x-charts';
 import { useEffect, useState } from 'react';
@@ -12,6 +19,7 @@ export default function Chart() {
   const [data, setData] = useState<{ category: string; count: number }[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     let ignore = false;
@@ -83,7 +91,12 @@ export default function Chart() {
           <Paper sx={{ p: 3 }}>
             <BarChart
               xAxis={[{ scaleType: 'band', data: data.map(d => d.category) }]}
-              series={[{ data: data.map(d => d.count) }]}
+              series={[
+                {
+                  data: data.map(d => d.count),
+                  color: theme.palette.secondary.main,
+                },
+              ]}
               height={350}
             />
           </Paper>

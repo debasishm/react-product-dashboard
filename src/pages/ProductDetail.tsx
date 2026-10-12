@@ -176,7 +176,7 @@ export default function ProductDetail() {
                 value={review.rating}
                 readOnly
                 size="small"
-                className="review-rating"
+                sx={{ '& .MuiRating-iconFilled': { color: 'tertiary.main' } }}
               />
 
               <Typography variant="body2">{review.comment}</Typography>
