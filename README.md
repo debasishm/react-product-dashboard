@@ -30,11 +30,11 @@ Application Pages
 
 Clone the repository:
 
-git clone https://github.com/debasishm/react-product-dashboard/tree/develop
+git clone https://github.com/debasishm/react-product-dashboard.git
 
 Navigate into the project:
 
-cd product-dashboard
+cd react-product-dashboard
 
 Install dependencies:
 

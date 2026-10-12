@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "typecheck": "tsc -b",
+    "test:run": "vitest run",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -20,7 +22,6 @@
     "@mui/icons-material": "^7.3.8",
     "@mui/material": "^7.3.8",
     "@mui/x-charts": "^8.27.0",
-    "@mui/x-internal-gestures": "^0.4.0",
     "axios": "^1.13.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -52,14 +53,11 @@
     "vitest": "^4.0.18"
   },
   "lint-staged": {
-    "**/*.{js,ts}": [
-      "prettier --write",
-      "eslint ."
-    ],
-    "**/*.json": [
+    "**/*.{ts,tsx}": [
+      "eslint --fix",
       "prettier --write"
     ],
-    "**/*.md": [
+    "**/*.{js,json,md,css}": [
       "prettier --write"
     ]
   }

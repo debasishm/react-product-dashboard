@@ -37,4 +37,27 @@ describe('ProductCard', () => {
 
     expect(screen.getByText(/100/)).toBeInTheDocument();
   });
+
+  it('renders the formatted price', () => {
+    render(
+      <MemoryRouter>
+        <ProductCard product={mockProduct} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('$100.00')).toBeInTheDocument();
+  });
+
+  it('links to the product detail route', () => {
+    render(
+      <MemoryRouter>
+        <ProductCard product={mockProduct} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('link', { name: 'View' })).toHaveAttribute(
+      'href',
+      '/products/1'
+    );
+  });
 });

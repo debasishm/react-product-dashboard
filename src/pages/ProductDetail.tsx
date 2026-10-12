@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
+  Alert,
   Box,
   Typography,
-  CircularProgress,
   Card,
   CardMedia,
   Button,
@@ -13,11 +13,9 @@ import {
 import Grid from '@mui/material/Grid';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import {
-  getProductDetail,
-  checkIfFavorite,
-  toggleProductFavorite,
-} from '../services/product.service';
+import ProductDetailSkeleton from '../components/ProductDetailSkeleton';
+import { getProductById } from '../services/product.service';
+import { isFavorite, toggleFavorite } from '../utils/favourites';
 import type { Product } from '../types/product.types';
 import '../styles/page.css';
 
@@ -35,47 +33,58 @@ export default function ProductDetail() {
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [isFav, setIsFav] = useState<boolean>(false);
 
   /**
    * Loads product details from service
    */
-  const loadProduct = async () => {
+  useEffect(() => {
     if (!id) return;
 
-    try {
-      setLoading(true);
+    // Set to true by the cleanup function below if this effect is outdated
+    let ignore = false;
 
-      const data = await getProductDetail(id);
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      if (data) {
+        const data = await getProductById(id);
+        if (ignore) return;
+
         setProduct(data);
-        setIsFav(checkIfFavorite(data.id));
-      }
-    } catch (error) {
-      console.error('Error loading product:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setIsFav(isFavorite(data.id));
+      } catch {
+        if (ignore) return;
 
-  useEffect(() => {
+        setProduct(null);
+        setError('Unable to load this product. Please try again.');
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+
     loadProduct();
+
+    return () => {
+      ignore = true;
+    };
   }, [id]);
 
   const handleFavoriteToggle = () => {
     if (!product) return;
 
-    toggleProductFavorite(product.id);
+    toggleFavorite(product.id);
     setIsFav(prev => !prev);
   };
 
-  if (loading || !product) {
-    return (
-      <Box className="center-box">
-        <CircularProgress />
-      </Box>
-    );
+  if (loading) {
+    return <ProductDetailSkeleton />;
+  }
+
+  if (error || !product) {
+    return <Alert severity="error">{error ?? 'Product not found.'}</Alert>;
   }
 
   return (
@@ -95,7 +104,7 @@ export default function ProductDetail() {
               height="350"
               image={product.images[0]}
               alt={product.title}
-              className="product-detail-main-image"
+              className="detail-main-image"
             />
           </Card>
 
@@ -109,7 +118,7 @@ export default function ProductDetail() {
                     height="100"
                     image={img}
                     alt={`Thumbnail ${index}`}
-                    className="product-detail-thumbnail"
+                    className="detail-thumbnail"
                   />
                 </Card>
               </Grid>
@@ -121,7 +130,7 @@ export default function ProductDetail() {
             Right Side - Product Info
         ================================ */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Typography variant="h5" color="primary" className="product-price">
+          <Typography variant="h5" color="primary" className="detail-price">
             ${product.price}
           </Typography>
 
@@ -129,7 +138,7 @@ export default function ProductDetail() {
             variant="outlined"
             color={isFav ? 'error' : 'primary'}
             startIcon={isFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            className="favorite-btn"
+            className="detail-fav-btn"
             onClick={handleFavoriteToggle}
           >
             {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
@@ -149,7 +158,7 @@ export default function ProductDetail() {
         </Grid>
       </Grid>
 
-      <Divider className="section-divider" />
+      <Divider className="detail-divider" />
 
       <Box className="reviews-section">
         <Typography variant="h5" className="section-title">

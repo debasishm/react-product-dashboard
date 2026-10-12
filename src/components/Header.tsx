@@ -34,6 +34,7 @@ export default function Header() {
           <IconButton
             edge="start"
             color="inherit"
+            aria-label="Open navigation menu"
             sx={{ display: { xs: 'block', md: 'none' }, mr: 2 }}
             onClick={() => setOpen(true)}
           >

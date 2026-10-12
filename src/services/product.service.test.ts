@@ -44,14 +44,25 @@ describe('product.service', () => {
     expect(apiClient.get).toHaveBeenCalled();
   });
 
-  it('gets categories', async () => {
+  it('maps category objects to their slugs', async () => {
     vi.mocked(apiClient.get).mockResolvedValue({
-      data: ['electronics', 'clothing'],
+      data: [
+        {
+          slug: 'beauty',
+          name: 'Beauty',
+          url: 'https://dummyjson.com/products/category/beauty',
+        },
+        {
+          slug: 'laptops',
+          name: 'Laptops',
+          url: 'https://dummyjson.com/products/category/laptops',
+        },
+      ],
     });
 
     const result = await getCategories();
 
-    expect(result).toEqual(['electronics', 'clothing']);
+    expect(result).toEqual(['beauty', 'laptops']);
   });
 
   it('gets product by id', async () => {

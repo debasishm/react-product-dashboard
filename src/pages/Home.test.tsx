@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Home from './Home';
 import * as hook from '../hooks/useProducts';
 import type { Product } from '../types/product.types';
+import { createMockProduct } from '../test/mocks/product.mock';
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -24,7 +25,9 @@ describe('Home page', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(
+      screen.getByRole('status', { name: /loading products/i })
+    ).toBeInTheDocument();
   });
 
   it('shows error message', () => {
@@ -73,5 +76,40 @@ describe('Home page', () => {
     );
 
     expect(screen.getByText('Test Product')).toBeInTheDocument();
+  });
+
+  it('shows an empty state when there are no products', () => {
+    vi.spyOn(hook, 'useProducts').mockReturnValue({
+      products: [] as Product[],
+      total: 0,
+      loading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/no products found/i)).toBeInTheDocument();
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
+  });
+
+  it('shows pagination when there is more than one page', () => {
+    vi.spyOn(hook, 'useProducts').mockReturnValue({
+      products: [createMockProduct()],
+      total: 25,
+      loading: false,
+      error: null,
+    });
+
+    render(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 });

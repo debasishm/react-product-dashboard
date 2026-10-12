@@ -1,16 +1,8 @@
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Button,
-  Box,
-  CircularProgress,
-  Alert,
-} from '@mui/material';
+import { Typography, Button, Box, Alert } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useNavigate } from 'react-router-dom';
+import ProductCard from '../components/ProductCard';
+import ProductGridSkeleton from '../components/ProductGridSkeleton';
 import { useFavoriteProducts } from '../hooks/useFavoriteProducts';
 import { toggleFavorite } from '../utils/favourites';
 import '../styles/page.css';
@@ -32,8 +24,6 @@ export default function Dashboard() {
    */
   const { products, setProducts, loading, error } = useFavoriteProducts();
 
-  const navigate = useNavigate();
-
   /**
    * Removes a product from favorites
    *
@@ -50,11 +40,7 @@ export default function Dashboard() {
         Favorite Products
       </Typography>
 
-      {loading && (
-        <Box className="center-box">
-          <CircularProgress />
-        </Box>
-      )}
+      {loading && <ProductGridSkeleton count={4} />}
 
       {error && <Alert severity="error">{error}</Alert>}
 
@@ -69,35 +55,20 @@ export default function Dashboard() {
       <Grid container spacing={3}>
         {products.map(product => (
           <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
-            <Card className="product-card">
-              <CardMedia
-                component="img"
-                height="160"
-                image={product.thumbnail}
-                alt={product.title}
-                className="product-image clickable"
-                loading="lazy"
-                onClick={() => navigate(`/products/${product.id}`)}
-              />
-
-              <CardContent>
-                <Typography variant="h6" noWrap>
-                  {product.title}
-                </Typography>
-
-                <Typography color="text.secondary">${product.price}</Typography>
-
+            <ProductCard
+              product={product}
+              actions={
                 <Button
-                  fullWidth
+                  size="small"
                   color="error"
                   startIcon={<FavoriteIcon />}
-                  className="remove-btn"
+                  aria-label={`Remove ${product.title} from favorites`}
                   onClick={() => handleRemove(product.id)}
                 >
                   Remove
                 </Button>
-              </CardContent>
-            </Card>
+              }
+            />
           </Grid>
         ))}
       </Grid>

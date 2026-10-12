@@ -8,15 +8,18 @@ import type { Product } from '../types/product.types';
 /**
  * Product analytics dashboard
  */
-export default function Charts() {
+export default function Chart() {
   const [data, setData] = useState<{ category: string; count: number }[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let ignore = false;
+
     const loadAnalytics = async () => {
       try {
         const products: Product[] = await getAllProducts(100);
+        if (ignore) return;
 
         const categoryMap: Record<string, number> = {};
 
@@ -30,13 +33,18 @@ export default function Charts() {
 
         setData(formatted);
       } catch {
+        if (ignore) return;
         setError('Unable to load analytics data.');
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
     };
 
     loadAnalytics();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   if (loading) {
@@ -51,12 +59,27 @@ export default function Charts() {
 
   return (
     <Box>
-      <Typography variant="h4" mb={4}>
+      <Typography variant="h4" component="h1" mb={4}>
         Product Analytics
       </Typography>
 
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 6 }}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Products per category
+          </Typography>
+          <BarChart
+            xAxis={[
+              {
+                scaleType: 'band',
+                data: data.map(d => d.category),
+                label: 'Category',
+              },
+            ]}
+            yAxis={[{ label: 'Number of products' }]}
+            series={[{ data: data.map(d => d.count) }]}
+            height={350}
+          />
           <Paper sx={{ p: 3 }}>
             <BarChart
               xAxis={[{ scaleType: 'band', data: data.map(d => d.category) }]}
@@ -67,6 +90,21 @@ export default function Charts() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Products per category
+          </Typography>
+          <BarChart
+            xAxis={[
+              {
+                scaleType: 'band',
+                data: data.map(d => d.category),
+                label: 'Category',
+              },
+            ]}
+            yAxis={[{ label: 'Number of products' }]}
+            series={[{ data: data.map(d => d.count) }]}
+            height={350}
+          />
           <Paper sx={{ p: 3 }}>
             <PieChart
               series={[

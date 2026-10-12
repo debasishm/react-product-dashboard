@@ -1,8 +1,8 @@
 import { apiClient } from './api.service';
 import { API_ENDPOINTS } from '../constants/api.constants';
 import type { Product } from '../types/product.types';
+import type { Category } from '../types/category.types';
 import type { ProductResponse } from '../types/api.types';
-import { isFavorite, toggleFavorite } from '../utils/favourites';
 
 /**
  * Fetch paginated products with optional search and category filter
@@ -66,11 +66,11 @@ export const getProducts = async ({
  * Fetch all product categories
  */
 export const getCategories = async (): Promise<string[]> => {
-  const response = await apiClient.get<string[]>(
+  const response = await apiClient.get<Category[]>(
     API_ENDPOINTS.PRODUCT_CATEGORIES
   );
 
-  return response.data;
+  return response.data.map(category => category.slug);
 };
 
 /**
@@ -82,21 +82,6 @@ export const getProductById = async (id: string | number): Promise<Product> => {
   );
 
   return response.data;
-};
-
-/**
- * Safe wrapper for product detail (with error handling)
- */
-export const getProductDetail = async (
-  id: string | number
-): Promise<Product | null> => {
-  try {
-    const product = await getProductById(id);
-    return product;
-  } catch (error) {
-    console.error('Failed to fetch product detail:', error);
-    return null;
-  }
 };
 
 /**
@@ -113,18 +98,4 @@ export const getAllProducts = async (
   );
 
   return response.data.products;
-};
-
-/**
- * Check if product is in favorites
- */
-export const checkIfFavorite = (id: number): boolean => {
-  return isFavorite(id);
-};
-
-/**
- * Toggle favorite status for product
- */
-export const toggleProductFavorite = (id: number): void => {
-  toggleFavorite(id);
 };

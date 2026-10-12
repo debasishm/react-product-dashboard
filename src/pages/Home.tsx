@@ -1,21 +1,19 @@
 import {
   Box,
-  Card,
-  CardContent,
-  CardMedia,
   Typography,
   Button,
   TextField,
   Pagination,
-  CircularProgress,
   Alert,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useDebounce } from '../hooks/useDebounce';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ProductGridSkeleton from '../components/ProductGridSkeleton';
 import CategoryFilter from '../components/CategoryFilter';
+import ProductCard from '../components/ProductCard';
 import { useProducts } from '../hooks/useProducts';
 import { PRODUCT_LIMIT } from '../constants/product.constants';
 import { toggleFavorite, getFavorites } from '../utils/favourites';
@@ -36,18 +34,26 @@ export default function Home() {
   const [category, setCategory] = useState('');
   const [favorites, setFavorites] = useState<number[]>(() => getFavorites());
 
-  const navigate = useNavigate();
+  // Wait until the user stops typing before calling the API
+  const debouncedSearch = useDebounce(search);
 
   const { products, total, loading, error } = useProducts(
     page,
-    search || undefined,
+    debouncedSearch || undefined,
     category || undefined
   );
+
+  const pageCount = Math.ceil(total / PRODUCT_LIMIT);
 
   return (
     <Box className="main-content">
       {/* Filters Section */}
       <Box className="filter-box">
+        {products.length === 0 && (
+          <Typography color="text.secondary" align="center">
+            No products found.
+          </Typography>
+        )}
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
@@ -75,11 +81,7 @@ export default function Home() {
       </Box>
 
       {/* Loader */}
-      {loading && (
-        <Box className="center-box">
-          <CircularProgress />
-        </Box>
-      )}
+      {loading && <ProductGridSkeleton />}
 
       {/* Error Message */}
       {error && <Alert severity="error">{error}</Alert>}
@@ -88,72 +90,43 @@ export default function Home() {
       {!loading && !error && (
         <>
           <Grid container spacing={3}>
-            {products.map(product => (
-              <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
-                <Card className="product-card">
-                  {/* Lazy loaded product image */}
-                  <CardMedia
-                    component="img"
-                    height="160"
-                    image={product.thumbnail}
-                    alt={product.title}
-                    className="product-image"
-                    loading="lazy"
-                  />
+            {products.map(product => {
+              const isFav = favorites.includes(product.id);
 
-                  <CardContent>
-                    <Typography variant="h6" noWrap>
-                      {product.title}
-                    </Typography>
-
-                    <Typography color="text.secondary">
-                      ${product.price}
-                    </Typography>
-
-                    <Box className="product-actions">
-                      {/* View Product */}
+              return (
+                <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                  <ProductCard
+                    product={product}
+                    actions={
                       <Button
                         size="small"
-                        onClick={() => navigate(`/products/${product.id}`)}
-                      >
-                        View
-                      </Button>
-
-                      {/* Favorite Toggle */}
-                      <Button
-                        size="small"
-                        color={
-                          favorites.includes(product.id) ? 'error' : 'primary'
-                        }
+                        color={isFav ? 'error' : 'primary'}
+                        aria-pressed={isFav}
+                        aria-label={`${isFav ? 'Unfavorite' : 'Favorite'} ${product.title}`}
                         startIcon={
-                          favorites.includes(product.id) ? (
-                            <FavoriteIcon />
-                          ) : (
-                            <FavoriteBorderIcon />
-                          )
+                          isFav ? <FavoriteIcon /> : <FavoriteBorderIcon />
                         }
-                        onClick={() => {
-                          const updated = toggleFavorite(product.id);
-                          setFavorites(updated);
-                        }}
+                        onClick={() => setFavorites(toggleFavorite(product.id))}
                       >
-                        Fav
+                        Favorite
                       </Button>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+                    }
+                  />
+                </Grid>
+              );
+            })}
           </Grid>
 
-          {/* Pagination */}
-          <Box className="pagination-box">
-            <Pagination
-              count={Math.ceil(total / PRODUCT_LIMIT)}
-              page={page}
-              onChange={(_, val) => setPage(val)}
-            />
-          </Box>
+          {/* Pagination (only when there is more than one page) */}
+          {pageCount > 1 && (
+            <Box className="pagination-box">
+              <Pagination
+                count={pageCount}
+                page={page}
+                onChange={(_, val) => setPage(val)}
+              />
+            </Box>
+          )}
         </>
       )}
     </Box>

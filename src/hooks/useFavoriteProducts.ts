@@ -8,10 +8,12 @@ import type { Product } from '../types/product.types';
  */
 export const useFavoriteProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let ignore = false;
+
     const loadFavorites = async () => {
       try {
         setLoading(true);
@@ -27,16 +29,23 @@ export const useFavoriteProducts = () => {
         const results = await Promise.all(
           favoriteIds.map(id => getProductById(id))
         );
+        if (ignore) return;
 
         setProducts(results);
       } catch {
+        if (ignore) return;
+
         setError('Unable to load favorite products.');
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
     };
 
     loadFavorites();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   return { products, setProducts, loading, error };

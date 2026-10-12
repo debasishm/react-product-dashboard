@@ -1,6 +1,5 @@
 .product-card {
-  width: 280px;
-  height: 360px;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -8,6 +7,17 @@
 .product-card-image {
   height: 160px;
   object-fit: cover;
+}
+
+.product-card-media {
+  height: 160px;
+  object-fit: cover;
+}
+
+.product-card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px 12px;
 }
 
 .product-card-content {
@@ -20,9 +30,4 @@
 
 .product-card-price {
   color: #666;
-}
-
-.category-filter {
-  min-width: 250px;
-  width: 100%;
 }

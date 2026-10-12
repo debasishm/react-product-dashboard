@@ -17,7 +17,11 @@ export const useProducts = (
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  // After
   useEffect(() => {
+    // Becomes true when this effect is outdated (page/search/category changed)
+    let ignore = false;
+
     const fetchProductsData = async () => {
       try {
         setLoading(true);
@@ -29,17 +33,24 @@ export const useProducts = (
           search,
           category,
         });
+        if (ignore) return;
 
         setProducts(response.products);
         setTotal(response.total);
       } catch {
+        if (ignore) return;
+
         setError('Unable to fetch products. Please try again.');
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
     };
 
     fetchProductsData();
+
+    return () => {
+      ignore = true;
+    };
   }, [page, search, category]);
 
   return { products, total, loading, error };

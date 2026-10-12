@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TextField, MenuItem } from '@mui/material';
-import { fetchCategories } from '../api/product.api';
-import '../styles/ProductCard.css';
+import { getCategories } from '../services/product.service';
+import '../styles/category-filter.css';
 import { APP_TEXT } from '../constants/text.constants';
 
 /**
@@ -23,7 +23,7 @@ export default function CategoryFilter({ value, onChange }: Props) {
    * Fetch categories on first render
    */
   useEffect(() => {
-    fetchCategories()
+    getCategories()
       .then(data => {
         setCategories(data);
       })

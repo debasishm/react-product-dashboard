@@ -1,11 +1,24 @@
 import { STORAGE_KEY } from '../constants/text.constants';
 
 /**
- * Retrieve favorite product IDs from localStorage
+ * Retrieve favorite product IDs from localStorage.
+ * Returns an empty list if storage is unavailable or holds invalid data.
  */
 export const getFavorites = (): number[] => {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : [];
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (!data) return [];
+
+    // JSON.parse can return anything, so we declare the shape we expect...
+    const parsed: number[] | null = JSON.parse(data);
+
+    // ...and still verify it at runtime, because storage can hold anything
+    return Array.isArray(parsed)
+      ? parsed.filter(id => typeof id === 'number')
+      : [];
+  } catch {
+    return [];
+  }
 };
 
 /**
@@ -19,13 +32,17 @@ export const isFavorite = (id: number): boolean => {
  * Toggle product in favorites
  */
 export const toggleFavorite = (id: number): number[] => {
-  let favorites = getFavorites();
+  const current = getFavorites();
 
-  favorites = favorites.includes(id)
-    ? favorites.filter(fav => fav !== id)
-    : [...favorites, id];
+  const favorites = current.includes(id)
+    ? current.filter(fav => fav !== id)
+    : [...current, id];
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+  } catch (error) {
+    console.error('Unable to save favorites:', error);
+  }
 
   return favorites;
 };

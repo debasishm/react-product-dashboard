@@ -1,11 +1,20 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CategoryFilter from './CategoryFilter';
-import * as api from '../api/product.api';
+import { getCategories } from '../services/product.service';
 
-vi.mock('../api/productsApi', () => ({
-  fetchCategories: vi.fn(),
+vi.mock('../services/product.service', () => ({
+  getCategories: vi.fn(),
 }));
+
+// The dropdown is disabled while categories load, so wait until it's enabled.
+const waitForLoaded = () =>
+  waitFor(() =>
+    expect(screen.getByLabelText(/select category/i)).not.toHaveAttribute(
+      'aria-disabled',
+      'true'
+    )
+  );
 
 describe('CategoryFilter', () => {
   beforeEach(() => {
@@ -13,30 +22,29 @@ describe('CategoryFilter', () => {
   });
 
   it('renders without crashing', async () => {
-    vi.mocked(api.fetchCategories).mockResolvedValue([]);
+    vi.mocked(getCategories).mockResolvedValue([]);
 
     render(<CategoryFilter value="" onChange={() => {}} />);
 
     expect(screen.getByLabelText(/select category/i)).toBeInTheDocument();
+    await waitForLoaded();
   });
 
-  it('calls fetchCategories on mount', async () => {
-    vi.mocked(api.fetchCategories).mockResolvedValue(['electronics']);
+  it('calls getCategories on mount', async () => {
+    vi.mocked(getCategories).mockResolvedValue(['electronics']);
 
     render(<CategoryFilter value="" onChange={() => {}} />);
 
-    await waitFor(() => {
-      expect(api.fetchCategories).toHaveBeenCalled();
-    });
+    await waitForLoaded();
+    expect(getCategories).toHaveBeenCalledTimes(1);
   });
 
   it('handles fetch error gracefully', async () => {
-    vi.mocked(api.fetchCategories).mockRejectedValue(new Error('Failed'));
+    vi.mocked(getCategories).mockRejectedValue(new Error('Failed'));
 
     render(<CategoryFilter value="" onChange={() => {}} />);
 
-    await waitFor(() => {
-      expect(api.fetchCategories).toHaveBeenCalled();
-    });
+    await waitForLoaded();
+    expect(getCategories).toHaveBeenCalledTimes(1);
   });
 });
