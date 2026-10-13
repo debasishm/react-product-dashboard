@@ -93,15 +93,6 @@ const baseTheme = createTheme({
         },
       },
     },
-    MuiButton: {
-      defaultProps: { disableElevation: true },
-      styleOverrides: {
-        root: {
-          // ...keep your existing rules...
-          '@media (pointer: coarse)': { minHeight: 44 },
-        },
-      },
-    },
     MuiIconButton: {
       styleOverrides: {
         root: {

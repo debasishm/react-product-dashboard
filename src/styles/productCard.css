@@ -18,10 +18,12 @@
   display: flex;
   justify-content: space-between;
   padding: 0 16px 12px;
+  min-height: 52px;
 }
 
 .product-card-content {
   flex-grow: 1;
+  min-height: 100px;
 }
 
 .product-card-title {

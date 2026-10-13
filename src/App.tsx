@@ -1,11 +1,10 @@
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Box, CircularProgress } from '@mui/material';
 import Layout from './components/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
+import Home from './pages/Home'; // landing page: loaded up front, not lazy
 
-// Each page is downloaded only when the user first visits it
-const Home = lazy(() => import('./pages/Home'));
+// Other pages are downloaded only when first visited
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Chart = lazy(() => import('./pages/Chart'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
@@ -16,24 +15,16 @@ export default function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <Suspense
-          fallback={
-            <Box display="flex" justifyContent="center" mt={8}>
-              <CircularProgress />
-            </Box>
-          }
-        >
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/chart" element={<Chart />} />
-              <Route path="/products/:id" element={<ProductDetail />} />
-              <Route path="/about" element={<About />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </Suspense>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/chart" element={<Chart />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </ErrorBoundary>
   );

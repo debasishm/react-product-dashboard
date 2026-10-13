@@ -5,7 +5,6 @@ import {
   Box,
   Typography,
   Card,
-  CardMedia,
   Button,
   Divider,
   Rating,
@@ -17,6 +16,7 @@ import ProductDetailSkeleton from '../components/ProductDetailSkeleton';
 import { getProductById } from '../services/product.service';
 import { isFavorite, toggleFavorite } from '../utils/favourites';
 import type { Product } from '../types/product.types';
+import ImageWithSkeleton from '../components/ImageWithSkeleton';
 import '../styles/page.css';
 
 /**
@@ -99,12 +99,11 @@ export default function ProductDetail() {
         ================================ */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Card>
-            <CardMedia
-              component="img"
-              image={product.images[0]}
+            <ImageWithSkeleton
+              src={product.images[0]}
               alt={product.title}
-              className="detail-main-image"
-              sx={{ height: { xs: 240, sm: 320, md: 350 } }}
+              height={{ xs: 240, sm: 320, md: 350 }}
+              priority
             />
           </Card>
 
@@ -113,12 +112,10 @@ export default function ProductDetail() {
             {product.images.slice(1, 4).map((img, index) => (
               <Grid key={index} size={{ xs: 4 }}>
                 <Card>
-                  <CardMedia
-                    component="img"
-                    sx={{ height: { xs: 64, sm: 100 } }}
-                    image={img}
-                    alt={`Thumbnail ${index}`}
-                    className="detail-thumbnail"
+                  <ImageWithSkeleton
+                    src={img}
+                    alt={`${product.title} - view ${index + 2}`}
+                    height={{ xs: 64, sm: 100 }}
                   />
                 </Card>
               </Grid>
